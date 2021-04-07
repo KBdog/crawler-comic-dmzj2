@@ -147,6 +147,7 @@ public class CrawlerComicPipeline implements Pipeline {
             return down(picUrl,pageNum,chapterName,comicName);
         }catch (Exception e){
             e.printStackTrace();
+            System.out.println("未知错误的章节:"+chapterName+"-----第"+pageNum+"页-----url:"+picUrl);
             return "error_" + "picUrl";
         }
         finally {
