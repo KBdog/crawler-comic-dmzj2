@@ -8,6 +8,7 @@ import entity.ComicPic;
 import entity.FreeProxy;
 import parser.DmzjParser;
 import parser.DmzjParserImpl;
+import run.RunProperties;
 import utils.JSONFormatTool;
 import utils.ProxyPool;
 
@@ -22,7 +23,26 @@ import java.util.Scanner;
 public class TestDmzjParser {
     public static void main(String[] args) {
 //        testGetComicMsg();
-        getProxy();
+//        getProxy();
+//        testParserGetChapter();
+        testParserGetPictures();
+    }
+
+    public static void testParserGetChapter(){
+        DmzjParser parser=new DmzjParserImpl();
+        List<ComicChapter> chapters = parser.getChapters(47139, RunProperties.proxy);
+        for(ComicChapter tmp:chapters){
+            System.out.println(tmp.getChapterId()+"-"+tmp.getChapterName());
+        }
+
+    }
+
+    public static void testParserGetPictures(){
+        DmzjParser parser=new DmzjParserImpl();
+        List<ComicPic> pictures = parser.getPictures(47139, 92386, RunProperties.proxy);
+        for(ComicPic tmp:pictures){
+            System.out.println(tmp.getUrl());
+        }
     }
 
 //    public static void testGetComicMsg(){

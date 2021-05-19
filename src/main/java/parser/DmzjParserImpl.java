@@ -93,6 +93,7 @@ public class DmzjParserImpl implements DmzjParser {
     http://v2.api.dmzj.com/comic/${id}.json (旧)
     http://v3api.dmzj.com/comic/comic_${id}.json(新)
     http://v3api.dmzj1.com/comic/comic_${id}.json(新)
+    https://api.dmzj.com/dynamic/comicinfo/34802.json
     漫画简介信息
      */
     @Override
@@ -105,7 +106,7 @@ public class DmzjParserImpl implements DmzjParser {
         //章节集合
         List<ComicChapter> chaptersList=new ArrayList<>();
         try {
-            url=new URL("http://v3api.dmzj1.com/comic/comic_"+comic_id+".json");
+            url=new URL("http://api.dmzj.com/dynamic/comicinfo/"+comic_id+".json");
             connection=(HttpURLConnection) url.openConnection
                     (new Proxy(Proxy.Type.HTTP,new InetSocketAddress(freeProxy.getIp(),freeProxy.getPort())));
 //            connection.connect();
@@ -128,17 +129,27 @@ public class DmzjParserImpl implements DmzjParser {
             if(isJson==true){
                 //获取到漫画简介json
                 JSONObject jsonObject=JSONObject.parseObject(comicJson);
-                //获取chapters
-                JSONArray json_chapters=(JSONArray) jsonObject.get("chapters");
-                //获取datas
-                JSONObject datas=json_chapters.getJSONObject(0);
-                //获取chapters数组
-                JSONArray chapters=(JSONArray) datas.get("data");
-                for(int i=0;i<chapters.size();i++){
-                    JSONObject chapterMsg=chapters.getJSONObject(i);
+//                //获取chapters
+//                JSONArray json_chapters=(JSONArray) jsonObject.get("chapters");
+//                //获取datas
+//                JSONObject datas=json_chapters.getJSONObject(0);
+//                //获取chapters数组
+//                JSONArray chapters=(JSONArray) datas.get("data");
+//                for(int i=0;i<chapters.size();i++){
+//                    JSONObject chapterMsg=chapters.getJSONObject(i);
+//                    chapter=new ComicChapter();
+//                    chapter.setChapterName(chapterMsg.get("chapter_title").toString());
+//                    chapter.setChapterId(Integer.parseInt(chapterMsg.get("chapter_id").toString()));
+//                    //把chapter加进集合
+//                    chaptersList.add(chapter);
+//                }
+                //获取data.list
+                JSONArray jsonArray = jsonObject.getJSONObject("data").getJSONArray("list");
+                for(Object obj:jsonArray){
+                    JSONObject tmp=(JSONObject) obj;
                     chapter=new ComicChapter();
-                    chapter.setChapterName(chapterMsg.get("chapter_title").toString());
-                    chapter.setChapterId(Integer.parseInt(chapterMsg.get("chapter_id").toString()));
+                    chapter.setChapterName(tmp.getString("chapter_name"));
+                    chapter.setChapterId(Integer.parseInt(tmp.getString("id")));
                     //把chapter加进集合
                     chaptersList.add(chapter);
                 }
@@ -177,6 +188,7 @@ public class DmzjParserImpl implements DmzjParser {
     漫画章节信息api:
     http://v3api.dmzj.com/chapter/${comic_id}/${chapter_id}.json
     http://v3api.dmzj1.com/chapter/${comic_id}/${chapter_id}.json
+    https://m.dmzj.com/chapinfo/47139/92386.html
     漫画章节信息
      */
     @Override
@@ -188,10 +200,9 @@ public class DmzjParserImpl implements DmzjParser {
         List<ComicPic> comicPicList=new ArrayList<>();
         ComicPic picUrl=null;
         try {
-            url=new URL("http://v3api.dmzj1.com/chapter/"+comic_id+"/"+chapter_id+".json");
+            url=new URL("https://m.dmzj.com/chapinfo/"+comic_id+"/"+chapter_id+".html");
             connection=(HttpURLConnection) url.openConnection(
                     new Proxy(Proxy.Type.HTTP,new InetSocketAddress(freeProxy.getIp(),freeProxy.getPort())));
-//            connection.connect();
             //io流操作
             inputStreamReader=new InputStreamReader(connection.getInputStream());
             bufferedReader=new BufferedReader(inputStreamReader);

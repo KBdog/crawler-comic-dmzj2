@@ -8,7 +8,7 @@ import java.util.List;
 
 public class RunProperties {
     //默认目录是d:/dmzj
-    public static String crawlerDirectory="D:/dmzj/";
+    public static String crawlerDirectory="D:/Comic/dmzj/";
     public static Comic comic=null;
     public static FreeProxy proxy= new FreeProxy("127.0.0.1",1080);
     public static Spider spider=null;

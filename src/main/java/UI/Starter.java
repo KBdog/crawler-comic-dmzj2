@@ -29,7 +29,7 @@ public class Starter {
         //程序开始
         DmzjParser parser=new DmzjParserImpl();
         Scanner in=new Scanner(System.in);
-        System.out.print("请输入漫画存放目录(若不设置默认为D:/dmzj):");
+        System.out.print("请输入漫画存放目录(若不设置默认为"+RunProperties.crawlerDirectory+"):");
         String directory=in.nextLine();
         if(directory!=null&&!directory.equals("")){
             RunProperties.crawlerDirectory=directory;
