@@ -30,6 +30,15 @@ public class CrawlerComicProcessor implements PageProcessor {
         if(comic!=null){
             //章节列表
             chapterList=parser.getChapters(comic.getComicId(),RunProperties.proxy);
+            //重试十次
+            if(chapterList==null){
+                for(int i=0;i<10;i++){
+                    chapterList=parser.getChapters(comic.getComicId(),RunProperties.proxy);
+                    if(chapterList!=null){
+                        break;
+                    }
+                }
+            }
             if(null!=chapterList){
                 //都不为空才放入域交给pipeline处理
                 page.putField("comic",comic);

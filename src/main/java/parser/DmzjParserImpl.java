@@ -38,7 +38,7 @@ public class DmzjParserImpl implements DmzjParser {
         String name=null;
         Comic comic=new Comic();
         try {
-            url=new URL("http://sacg.dmzj1.com/comicsum/search.php?s="+keyword);
+            url=new URL("http://sacg.dmzj.com/comicsum/search.php?s="+keyword);
             connection=(HttpURLConnection) url.openConnection(
                     new Proxy(Proxy.Type.HTTP,new InetSocketAddress(freeProxy.getIp(),freeProxy.getPort())));
             connection.connect();
@@ -123,26 +123,11 @@ public class DmzjParserImpl implements DmzjParser {
                 sb.append(cache,0,length);
             }
             String comicJson=sb.toString();
-
             //判断是否是json数组:被隐藏了就会返回null，没有隐藏就返回正常json
             Boolean isJson=JSON.isValidObject(comicJson);
             if(isJson==true){
                 //获取到漫画简介json
                 JSONObject jsonObject=JSONObject.parseObject(comicJson);
-//                //获取chapters
-//                JSONArray json_chapters=(JSONArray) jsonObject.get("chapters");
-//                //获取datas
-//                JSONObject datas=json_chapters.getJSONObject(0);
-//                //获取chapters数组
-//                JSONArray chapters=(JSONArray) datas.get("data");
-//                for(int i=0;i<chapters.size();i++){
-//                    JSONObject chapterMsg=chapters.getJSONObject(i);
-//                    chapter=new ComicChapter();
-//                    chapter.setChapterName(chapterMsg.get("chapter_title").toString());
-//                    chapter.setChapterId(Integer.parseInt(chapterMsg.get("chapter_id").toString()));
-//                    //把chapter加进集合
-//                    chaptersList.add(chapter);
-//                }
                 //获取data.list
                 JSONArray jsonArray = jsonObject.getJSONObject("data").getJSONArray("list");
                 for(Object obj:jsonArray){
@@ -225,7 +210,7 @@ public class DmzjParserImpl implements DmzjParser {
             String []urlList=tmpUrlString.split(",");
             for(int i=0;i<urlList.length;i++){
                 //去掉头尾的引号
-                String page_url=urlList[i].replaceAll("\"","");
+                String page_url=urlList[i].replaceAll("\"","").replaceAll("com//","com/");
                 picUrl=new ComicPic();
                 picUrl.setUrl(page_url);
                 //把所有页面的url加入集合
@@ -270,7 +255,7 @@ public class DmzjParserImpl implements DmzjParser {
         //漫画实体
         Comic comic=null;
         try {
-            url=new URL("http://sacg.dmzj1.com/comicsum/search.php?s="+keyword);
+            url=new URL("http://sacg.dmzj.com/comicsum/search.php?s="+keyword);
             connection=(HttpURLConnection) url.openConnection(
                     new Proxy(Proxy.Type.HTTP,new InetSocketAddress(freeProxy.getIp(),freeProxy.getPort())));
 //            connection.connect();

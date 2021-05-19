@@ -119,7 +119,7 @@ public class CrawlerComicPipeline implements Pipeline {
             connection.setReadTimeout(2000);
             connection.addRequestProperty("User-Agent",
                     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36");
-            connection.setRequestProperty("Referer","http://imgsmall.dmzj.com/");
+            connection.setRequestProperty("Referer","https://www.dmzj1.com/");
 //            connection.connect();
             inputStream=connection.getInputStream();
             //输入流
@@ -133,11 +133,6 @@ public class CrawlerComicPipeline implements Pipeline {
 //                fileOutputStream.write(cache, 0, length);
                 bufferedOutputStream.write(cache,0,length);
             }
-//            bufferedOutputStream.close();
-//            fileOutputStream.close();
-//            bufferedInputStream.close();
-//            inputStream.close();
-//            connection.disconnect();
             return "success_" + "picUrl";
         }catch (FileNotFoundException e){
             System.out.println("图片失效的章节:"+chapterName+"-----第"+pageNum+"页-----url:"+picUrl);
@@ -148,7 +143,7 @@ public class CrawlerComicPipeline implements Pipeline {
         }catch (Exception e){
             e.printStackTrace();
             System.out.println("未知错误的章节:"+chapterName+"-----第"+pageNum+"页-----url:"+picUrl);
-            return "error_" + "picUrl";
+            return down(picUrl,pageNum,chapterName,comicName);
         }
         finally {
             try {
